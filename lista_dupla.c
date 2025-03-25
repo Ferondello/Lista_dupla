@@ -83,6 +83,24 @@ int insere_ordenado(Lista *p_l, elem_t e)
 /* Verifica se a lista está ordenada */
 int ordenada(Lista *p_l)
 {
+    Lista aux = *p_l;
+    if (aux == NULL)
+    { // retorna 0 caso a lista esteja vazia
+        return 0;
+    }
+    if (aux->prox == NULL)
+    { // se a lista só tem um elemento esta ordenada
+        return 1;
+    }
+    while (aux->prox != NULL)
+    {
+        if (aux->info < aux->prox->info)
+        { // retorna 0 caso a lista não esteja ordenada
+            return 0;
+        }
+
+        aux = aux->prox; // avança o ponteiro auxiliar
+    }
 }
 
 /* Ordena a lista */
@@ -94,6 +112,12 @@ void ordena(Lista *p_l)
    Retorna 0 caso a lista esteja vazia */
 int remove_inicio(Lista *p_l, elem_t *p_e)
 {
+    if (*p_l == NULL)
+    { // retorna 0 caso a lista estja vazia
+        return 0;
+    }
+    *p_l = (*p_l)->prox;
+    (*p_l)->ant = NULL;
 }
 
 /* Remove o elemento que está no final da lista.
