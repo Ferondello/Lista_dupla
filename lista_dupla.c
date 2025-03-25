@@ -11,6 +11,11 @@ void cria(Lista *p_l)
 /* Verifica se a lista está vazia ou não */
 int vazia(Lista *p_l)
 {
+    if (*p_l == NULL)
+    {
+        return 1;
+    }
+    return 0;
 }
 
 /* Insere um elemento no início da lista */
@@ -33,6 +38,22 @@ void insere_inicio(Lista *p_l, elem_t e)
 /* Insere um elemento no final da lista */
 void insere_fim(Lista *p_l, elem_t e)
 {
+    Lista aux = *p_l;
+    Lista novo = (No_lista *)malloc(sizeof(No_lista));
+    novo->info = e;
+    novo->prox = NULL; // aloca espaço para mais informações
+
+    if (*p_l == NULL)
+    { // se a lista estiver vazia, insere no primeiro elemento
+        *p_l = novo;
+    }
+
+    while (aux->prox != NULL)
+    {
+        aux = aux->prox; // percorre a variavel aux ate o fim da lista
+    }
+    novo->ant = aux;
+    aux->prox = novo; // insere o novo elemento no final
 }
 
 /* Insere um elemento na lista de maneira ordenada.
