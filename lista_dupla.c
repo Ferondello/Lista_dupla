@@ -62,6 +62,7 @@ void insere_fim(Lista *p_l, elem_t e)
 int insere_ordenado(Lista *p_l, elem_t e)
 {
     Lista aux = *p_l;
+    Lista anterior = NULL;
     Lista novo = (No_lista *)malloc(sizeof(No_lista));
     novo->info = e;
     if (*p_l == NULL) // se a lista estiver vazia insere no primeiro elemento
@@ -72,12 +73,23 @@ int insere_ordenado(Lista *p_l, elem_t e)
     }
     while (aux->prox != NULL && aux->info < e)
     {
-
         aux = aux->prox;
+    }
+    if (aux->info == e) // caso o elemento ja esteja na lista
+    {
+        free(novo);
+        return 0;
+    }
+    if (aux->ant == NULL) // caso seja o primeiro elemento
+    {
+        novo->prox = *p_l;
+        novo->ant = NULL;
+        return 1;
     }
     novo->ant = aux;
     novo->prox = aux->prox->prox;
     aux->prox = novo;
+    return 1;
 }
 
 /* Verifica se a lista está ordenada */
@@ -124,6 +136,23 @@ int remove_inicio(Lista *p_l, elem_t *p_e)
    Retorna 0 caso a lista esteja vazia */
 int remove_fim(Lista *p_l, elem_t *p_e)
 {
+    Lista remove;
+    if (*p_l == NULL)
+    {
+        return 0;
+    }
+    while ((*p_l)->prox != NULL) // precorre o ponteiro ate o final
+    {
+        (*p_l) = (*p_l)->prox;
+    }
+    remove = *p_l;
+    (*p_l) = (*p_l)->ant;
+    (*p_l)->prox = NULL; // remove o ultimo elemento
+    free(remove);
+    while ((*p_l)->ant != NULL)
+    {
+        *p_l = (*p_l)->ant;
+    }
 }
 
 /* Remove o nó de valor e.
