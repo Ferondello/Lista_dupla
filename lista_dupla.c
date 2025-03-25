@@ -61,6 +61,23 @@ void insere_fim(Lista *p_l, elem_t e)
    Assume que a lista está ordenada */
 int insere_ordenado(Lista *p_l, elem_t e)
 {
+    Lista aux = *p_l;
+    Lista novo = (No_lista *)malloc(sizeof(No_lista));
+    novo->info = e;
+    if (*p_l == NULL) // se a lista estiver vazia insere no primeiro elemento
+    {
+        novo->ant = NULL;
+        novo->prox = NULL;
+        *p_l = novo;
+    }
+    while (aux->prox != NULL && aux->info < e)
+    {
+
+        aux = aux->prox;
+    }
+    novo->ant = aux;
+    novo->prox = aux->prox->prox;
+    aux->prox = novo;
 }
 
 /* Verifica se a lista está ordenada */
