@@ -118,6 +118,46 @@ int ordenada(Lista *p_l)
 /* Ordena a lista */
 void ordena(Lista *p_l)
 {
+    // Casos base: lista vazia ou com apenas um elemento
+    if (*p_l == NULL || (*p_l)->prox == NULL) {
+        return;
+    }
+
+    Lista ordenada = NULL;  // Lista ordenada (inicialmente vazia)
+    Lista atual = *p_l;     // Ponteiro para percorrer a lista original
+
+    while (atual != NULL) {
+        Lista proximo = atual->prox;  // Guarda o próximo nó antes de modificá-lo
+        
+        // Caso 1: lista ordenada está vazia ou o elemento atual é menor que o primeiro
+        if (ordenada == NULL || atual->info <= ordenada->info) {
+            atual->prox = ordenada;
+            atual->ant = NULL;
+            if (ordenada != NULL) {
+                ordenada->ant = atual;
+            }
+            ordenada = atual;
+        } 
+        // Caso 2: inserir no meio ou final da lista ordenada
+        else {
+            Lista temp = ordenada;
+            // Encontra o ponto de inserção
+            while (temp->prox != NULL && temp->prox->info < atual->info) {
+                temp = temp->prox;
+            }
+            // Insere o nó atual
+            atual->prox = temp->prox;
+            atual->ant = temp;
+            if (temp->prox != NULL) {
+                temp->prox->ant = atual;
+            }
+            temp->prox = atual;
+        }
+
+        atual = proximo;  // Avança para o próximo nó
+    }
+
+    *p_l = ordenada;  // Atualiza o ponteiro da lista
 }
 
 /* Remove o elemento que está no início da lista.
@@ -159,16 +199,72 @@ int remove_fim(Lista *p_l, elem_t *p_e)
    Retorna 0 caso este nó não tenha sido encontrado */
 int remove_valor(Lista *p_l, elem_t e)
 {
+    Lista aux = *p_l;
+    if(*p_l == NULL){
+        return 0; //lista vazia
+    }
+    if((*p_l) ->info == e){
+        *p_l = NULL; // somente um elemento
+    }
+    while(aux ->prox != NULL){
+        if(aux->info == e){
+            if(aux->ant == NULL){
+                aux->ant->prox = aux->prox;
+            aux->prox->ant = aux->ant;
+            }
+            aux->ant->prox = aux->prox;
+            aux->prox->ant = aux->ant;
+            aux = NULL;
+            return 1;
+        }
+        aux = aux->prox;
+    }
+    return 0;
+
 }
 
 /* Inverte os elementos de uma lista */
 void inverte(Lista *p_l)
 {
+    Lista aux = *p_l;
+    Lista temp = NULL;
+    
+    // Caso especial: lista vazia ou com apenas um elemento
+    if (aux == NULL || aux->prox == NULL) {
+        return;
+    }
+    
+    // Percorre a lista trocando os ponteiros
+    while (aux != NULL) {
+        // Guarda o ponteiro anterior
+        temp = aux->ant;
+        
+        // Inverte os ponteiros
+        aux->ant = aux->prox;
+        aux->prox = temp;
+        
+        // Avança para o próximo nó (que agora está em ant)
+        aux = aux->ant;
+    }
+    
+    // Atualiza o ponteiro da lista para o novo primeiro elemento
+    if (temp != NULL) {
+        *p_l = temp->ant;
+    }
 }
 
 /* Remove todos os nós da lista */
 void libera(Lista *p_l)
 {
+    Lista aux = *p_l;
+    while(aux->prox != NULL){
+        aux = aux->prox;
+    }
+    while(aux->ant != NULL){
+
+    }
+
+
 }
 
 /* Exibe o conteúdo da lista */
